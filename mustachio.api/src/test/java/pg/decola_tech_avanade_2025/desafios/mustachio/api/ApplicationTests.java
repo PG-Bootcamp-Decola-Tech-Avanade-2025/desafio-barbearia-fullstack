@@ -1,0 +1,13 @@
+package pg.decola_tech_avanade_2025.desafios.mustachio.api;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class ApplicationTests {
+
+	@Test
+	void contextLoads() {
+	}
+
+}
