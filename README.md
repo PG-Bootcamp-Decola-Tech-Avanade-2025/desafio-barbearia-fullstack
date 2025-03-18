@@ -12,8 +12,7 @@ Consiste na criação de um Front-End com Angular e um Back-End com Java e Sprin
 ### Setup
 
 #### Base
-Utilizando a ferramenta [Spring Initializr](https://start.spring.io), foi gerado um projeto Spring com alguns starters
-que serão utilizados na construção do projeto. Esse projeto gerado irá servir como base para o desenvolvimento da API.
+Utilizando a ferramenta [Spring Initializr](https://start.spring.io), foi gerado um projeto Spring com alguns starters que serão utilizados na construção do projeto. Esse projeto gerado irá servir como base para o desenvolvimento da API.
 ![Setup do Projeto Base no Spring Initializr](./img/initializr_setup.png)
 
 #### Dependências Iniciais Adicionais
@@ -40,7 +39,21 @@ Adicionada com a seguinte estrutura no arquivo pom.xml:
 </dependency>
 ```
 
+## Front-End
+Aqui não vou seguir nenhum planejamento muito definido; Parto dos reguintes requisitos para montar as telas:
+- Realizar registro de usuário;
+- Realizar agendamento;
+- Listar agendamentos;
+- Editar agendamento.
+
+### Setup
+O projeto foi gerado utilizando a CLI do Angular, comando `ng new`.
+
+#### Dependências Iniciais Adicionais
+Foi adicionada a library de componentes Angular Material; Adicionada com o seguinte comando: `ng add @angular/material`.
+
 ## Referências
 - [Baeldung - Spring Data JPA @Query](https://www.baeldung.com/spring-data-jpa-query)
 - [Baeldung - Hibernate One to Many Annotation Tutorial](https://www.baeldung.com/hibernate-one-to-many)
 - [Baeldung - Validation in Spring Boot](https://www.baeldung.com/spring-boot-bean-validation)
+- [Getting Started with Angular Material](https://material.angular.io/guide/getting-started)
