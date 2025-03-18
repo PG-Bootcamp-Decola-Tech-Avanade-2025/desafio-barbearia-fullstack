@@ -4,13 +4,20 @@ Consiste na criação de um Front-End com Angular e um Back-End com Java e Sprin
 
 ## Back-End / API
 
+### Planejamento
+
+#### Entidades do Sistema
+![Entity-Relational Mapping do Sistema](./img/modelagem_inicial.png)
+
 ### Setup
+
 #### Base
 Utilizando a ferramenta [Spring Initializr](https://start.spring.io), foi gerado um projeto Spring com alguns starters
 que serão utilizados na construção do projeto. Esse projeto gerado irá servir como base para o desenvolvimento da API.
 ![Setup do Projeto Base no Spring Initializr](./img/initializr_setup.png)
 
 #### Dependências Iniciais Adicionais
+
 ##### OpenAPI / SwaggerUI - SpringDoc
 A dependência SpringDoc adiciona suporte a OpenAPI e SwaggerUI na aplicação.
 Adicionada com a seguinte estrutura ao arquivo pom.xml:
@@ -22,5 +29,18 @@ Adicionada com a seguinte estrutura ao arquivo pom.xml:
 </dependency>
 ```
 
+##### Spring Starter Validation
+A dependência spring starter validation permite validação de dados na aplicação.
+Adicionada com a seguinte estrutura no arquivo pom.xml:
+```
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-validation</artifactId>
+    <version>3.4.3</version>
+</dependency>
+```
+
 ## Referências
-- [Telusko - Spring Security 6 with Spring Boot and JWT Tutorial](https://www.youtube.com/watch?v=oeni_9g7too)
+- [Baeldung - Spring Data JPA @Query](https://www.baeldung.com/spring-data-jpa-query)
+- [Baeldung - Hibernate One to Many Annotation Tutorial](https://www.baeldung.com/hibernate-one-to-many)
+- [Baeldung - Validation in Spring Boot](https://www.baeldung.com/spring-boot-bean-validation)
