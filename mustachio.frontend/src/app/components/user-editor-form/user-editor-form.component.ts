@@ -1,7 +1,8 @@
 import { Component, inject, output, OutputEmitterRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field'
-import { MatInputModule } from '@angular/material/input'
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatCardModule } from '@angular/material/card'
 import { UserEditorDto } from '../../model/user-editor-dto';
 
 @Component({
@@ -9,7 +10,8 @@ import { UserEditorDto } from '../../model/user-editor-dto';
   imports: [
     ReactiveFormsModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    MatCardModule
   ],
   templateUrl: './user-editor-form.component.html'
 })

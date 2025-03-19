@@ -1,20 +1,28 @@
 <h1> Home </h1>
 
-<table>
-  <thead>
+<table mat-table [dataSource]="userService.findAll()" class="w-xl">
+  <ng-container matColumnDef="id">
+    <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
+    <mat-cell *matCellDef="let user"> {{user.id}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="username">
+    <mat-header-cell *matHeaderCellDef> Username </mat-header-cell>
+    <mat-cell *matCellDef="let user"> {{user.username}} </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="['id', 'username']"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: ['id', 'username'];"></mat-row>
+  <!-- <thead>
     <th>id</th>
-    <th>email</th>
     <th>username</th>
-    <th>password</th>
   </thead>
   <tbody>
     @for (user of userService.findAll(); track $index) {
       <tr>
         <td>{{ user.id }}</td>
-        <td>{{ user.email }}</td>
         <td>{{ user.username }}</td>
-        <td>{{ user.password }}</td>
       </tr>
     }
-  </tbody>
+  </tbody> -->
 </table>

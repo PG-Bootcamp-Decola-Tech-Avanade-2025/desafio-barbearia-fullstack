@@ -1,11 +1,20 @@
+<mat-card appearance="outlined"
+  class="gap-5 w-xl !border-0 !bg-transparent"
+>
+
+<mat-card-header>
+  <h1 class="text-2xl">Registro</h1>
+</mat-card-header>
+
+<mat-card-content>
+
 <form (ngSubmit)="onSubmit()" [formGroup]="userEditorForm"
-  class="grid"
+  class="grid gap-2.5"
   style="*{border: 1px solid black}"
 >
-  <span>{{ userEditorForm.status }}</span>
-
-  <mat-form-field>
-    <input matInput type="email" [formControlName]="'email'" [id]="'email'" placeholder="E-Mail">
+  <mat-form-field appearance="outline">
+    <mat-label>E-Mail</mat-label>
+    <input matInput type="email" [formControlName]="'email'" [id]="'email'">
     <mat-error>
       @if (userEditorForm.get("email")?.hasError('required')) {
         Informe um endereço de e-mail.
@@ -15,8 +24,9 @@
     </mat-error>
   </mat-form-field>
 
-  <mat-form-field>
-    <input matInput type="text" [formControlName]="'username'" [id]="'username'" placeholder="Username">
+  <mat-form-field appearance="outline">
+    <mat-label>Username</mat-label>
+    <input matInput type="text" [formControlName]="'username'" [id]="'username'">
     <mat-error>
       @if (userEditorForm.get("username")?.hasError('required')) {
         Informe um nome de usuário.
@@ -24,8 +34,9 @@
     </mat-error>
   </mat-form-field>
 
-  <mat-form-field>
-    <input matInput type="password" [formControlName]="'password'" [id]="'password'" placeholder="Password">
+  <mat-form-field appearance="outline">
+    <mat-label>Password</mat-label>
+    <input matInput type="password" [formControlName]="'password'" [id]="'password'">
     <mat-error>
       @if (userEditorForm.get("password")?.hasError('required')) {
         Informe uma senha.
@@ -35,3 +46,6 @@
 
   <button type="submit">Submit ></button>
 </form>
+
+</mat-card-content>
+</mat-card>

@@ -1,4 +1,4 @@
-<div class="grid grid-cols-1 min-h-full" style="grid-template-rows: auto 0 1fr auto;">
+<div class="grid grid-cols-1 min-h-full" style="grid-template-rows: auto 1fr auto;">
 
 <header>
   <mat-toolbar
@@ -16,7 +16,9 @@
   </mat-toolbar>
 </header>
 
-<router-outlet></router-outlet>
+<div class="grid justify-center">
+  <router-outlet></router-outlet>
+</div>
 
 <footer>
   <mat-toolbar id="about">
