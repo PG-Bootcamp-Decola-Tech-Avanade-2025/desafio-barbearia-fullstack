@@ -1,0 +1,37 @@
+<form (ngSubmit)="onSubmit()" [formGroup]="userEditorForm"
+  class="grid"
+  style="*{border: 1px solid black}"
+>
+  <span>{{ userEditorForm.status }}</span>
+
+  <mat-form-field>
+    <input matInput type="email" [formControlName]="'email'" [id]="'email'" placeholder="E-Mail">
+    <mat-error>
+      @if (userEditorForm.get("email")?.hasError('required')) {
+        Informe um endereço de e-mail.
+      } @else if (userEditorForm.get("email")?.hasError('email')) {
+        Endereço inválido.
+      }
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput type="text" [formControlName]="'username'" [id]="'username'" placeholder="Username">
+    <mat-error>
+      @if (userEditorForm.get("username")?.hasError('required')) {
+        Informe um nome de usuário.
+      }
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput type="password" [formControlName]="'password'" [id]="'password'" placeholder="Password">
+    <mat-error>
+      @if (userEditorForm.get("password")?.hasError('required')) {
+        Informe uma senha.
+      }
+    </mat-error>
+  </mat-form-field>
+
+  <button type="submit">Submit ></button>
+</form>

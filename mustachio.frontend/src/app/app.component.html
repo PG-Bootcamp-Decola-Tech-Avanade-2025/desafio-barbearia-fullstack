@@ -4,14 +4,13 @@
   <mat-toolbar
   class="flex justify-between"
   >
-    <span class="text-2xl">
+    <a [routerLink]="''" class="text-2xl">
       <span class="inline-block rotate-80"> |:^<strong>&lbrace;</strong> </span>
       <span> Mustachio <span class="text-xl"> Barber Shop </span> </span>
-    </span>
+    </a>
     <nav class="text-xl">
       <ul class="flex flex-row gap-5">
-        <li><a href="">Anchor</a></li>
-        <li><a href="#about">About</a></li>
+        <li><a [routerLink]="'register'">Register</a></li>
       </ul>
     </nav>
   </mat-toolbar>
