@@ -1,8 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { UserEditorFormComponent } from "../user-editor-form/user-editor-form.component";
-import { UserEditorDto } from '../../model/user-editor-dto';
-import { FakeUserService } from '../../services/fake-user.service';
-import { IUserService } from '../../services/IUserService';
+import { UserEditorDto } from '../../dto/user-editor-dto';
+import { FakeUserService } from '../../service/fake-user.service';
+import { IUserService } from '../../service/IUserService';
 
 @Component({
   selector: 'app-register-user',

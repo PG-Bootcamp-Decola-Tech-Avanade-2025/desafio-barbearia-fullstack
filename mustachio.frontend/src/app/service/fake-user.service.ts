@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { IUserService } from './IUserService';
-import { UserEditorDto } from '../model/user-editor-dto';
+import { UserEditorDto } from '../dto/user-editor-dto';
 import { User } from '../model/user';
 
 @Injectable({

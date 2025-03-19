@@ -1,8 +1,10 @@
 import { Component, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { IUserService } from '../../services/IUserService';
-import { FakeUserService } from '../../services/fake-user.service';
+import { IUserService } from '../../service/IUserService';
+import { FakeUserService } from '../../service/fake-user.service';
 import { MatTableModule } from '@angular/material/table'
+import { IReservationService } from '../../service/IReservationService';
+import { FakeReservationService } from '../../service/fake-reservation.service';
 
 @Component({
   selector: 'app-home',
@@ -14,4 +16,5 @@ import { MatTableModule } from '@angular/material/table'
 })
 export class HomeComponent {
   userService: IUserService = inject(FakeUserService);
+  reservationService: IReservationService = inject(FakeReservationService);
 }

@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card'
-import { UserEditorDto } from '../../model/user-editor-dto';
+import { UserEditorDto } from '../../dto/user-editor-dto';
 
 @Component({
   selector: 'app-user-editor-form',

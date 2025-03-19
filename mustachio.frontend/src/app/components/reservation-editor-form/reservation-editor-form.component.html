@@ -1,0 +1,55 @@
+<mat-card appearance="outlined"
+  class="gap-5 w-xl !border-0 !bg-transparent"
+>
+
+<mat-card-header>
+  <h1 class="text-2xl">Reserva</h1>
+</mat-card-header>
+
+<mat-card-content>
+
+<form (ngSubmit)="onSubmit()" [formGroup]="reservationEditorForm"
+  class="grid gap-2.5"
+  style="*{border: 1px solid black}"
+>
+  <mat-form-field appearance="outline">
+    <mat-label>User ID</mat-label>
+    <input matInput type="text" [formControlName]="'userId'" [id]="'userId'">
+    <mat-error>
+      @if (reservationEditorForm.get("userId")?.hasError('required')) {
+        Informe um ID de usuário.
+      }
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Date</mat-label>
+    <input matInput
+      [matDatepicker]="startsAt"
+      [formControlName]="'startsAt'"
+    >
+    <mat-datepicker-toggle matIconSuffix [for]="startsAt"></mat-datepicker-toggle>
+    <mat-datepicker #startsAt></mat-datepicker>
+    <mat-error>
+      @if (reservationEditorForm.get("startsAt")?.hasError('required')) {
+        Informe uma data e hora.
+      }
+    </mat-error>
+  </mat-form-field>
+
+
+  <mat-form-field appearance="outline">
+    <mat-label>Time</mat-label>
+    <input matInput
+      [matTimepicker]="timepicker"
+      [formControlName]="'startsAt'"
+    >
+    <mat-timepicker #timepicker/>
+    <mat-timepicker-toggle [for]="timepicker" matSuffix/>
+  </mat-form-field>
+
+  <button type="submit">Submit ></button>
+</form>
+
+</mat-card-content>
+</mat-card>

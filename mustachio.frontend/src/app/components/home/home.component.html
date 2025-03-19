@@ -13,16 +13,29 @@
 
   <mat-header-row *matHeaderRowDef="['id', 'username']"></mat-header-row>
   <mat-row *matRowDef="let row; columns: ['id', 'username'];"></mat-row>
-  <!-- <thead>
-    <th>id</th>
-    <th>username</th>
-  </thead>
-  <tbody>
-    @for (user of userService.findAll(); track $index) {
-      <tr>
-        <td>{{ user.id }}</td>
-        <td>{{ user.username }}</td>
-      </tr>
-    }
-  </tbody> -->
+</table>
+
+<table mat-table [dataSource]="reservationService.findAll()" class="w-xl">
+  <ng-container matColumnDef="id">
+    <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
+    <mat-cell *matCellDef="let reservation"> {{reservation.id}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="userId">
+    <mat-header-cell *matHeaderCellDef>User ID </mat-header-cell>
+    <mat-cell *matCellDef="let reservation"> {{reservation.userId}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="startsAt">
+    <mat-header-cell *matHeaderCellDef> Starts At </mat-header-cell>
+    <mat-cell *matCellDef="let reservation"> {{reservation.startsAt}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="endsAt">
+    <mat-header-cell *matHeaderCellDef> Ends At </mat-header-cell>
+    <mat-cell *matCellDef="let reservation"> {{reservation.endsAt}} </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="['id', 'userId', 'startsAt', 'endsAt']"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: ['id', 'userId', 'startsAt', 'endsAt'];"></mat-row>
 </table>
