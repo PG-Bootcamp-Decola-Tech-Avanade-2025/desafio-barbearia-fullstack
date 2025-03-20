@@ -3,10 +3,14 @@ import { UserEditorFormComponent } from "../user-editor-form/user-editor-form.co
 import { UserEditorDto } from '../../dto/user-editor-dto';
 import { FakeUserService } from '../../service/fake-user.service';
 import { IUserService } from '../../service/IUserService';
+import { UsersListComponent } from "../users-list/users-list.component";
 
 @Component({
   selector: 'app-register-user',
-  imports: [UserEditorFormComponent],
+  imports: [
+    UserEditorFormComponent,
+    UsersListComponent
+  ],
   templateUrl: './register-user.component.html'
 })
 export class RegisterUserComponent {

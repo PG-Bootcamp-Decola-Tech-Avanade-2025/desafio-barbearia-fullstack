@@ -47,7 +47,6 @@ export class ReservationEditorFormComponent {
       null
     );
 
-    console.log(reservationEditorDto)
     this.submitValid.emit(reservationEditorDto);
   }
 }
