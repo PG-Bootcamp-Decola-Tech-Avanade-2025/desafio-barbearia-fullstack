@@ -3,6 +3,7 @@ import { MatTable, MatTableModule } from '@angular/material/table';
 import { IReservationService } from '../../service/IReservationService';
 import { FakeReservationService } from '../../service/fake-reservation.service';
 import { Reservation } from '../../model/reservation';
+import { ReservationService } from '../../service/reservation.service';
 
 @Component({
   selector: 'app-reservations-list',
@@ -12,7 +13,7 @@ import { Reservation } from '../../model/reservation';
   templateUrl: './reservations-list.component.html'
 })
 export class ReservationsListComponent implements DoCheck{
-  reservationService: IReservationService = inject(FakeReservationService);
+  reservationService: IReservationService = inject(ReservationService);
   reservationsTable: Signal<MatTable<Reservation> | undefined> = viewChild(MatTable<Reservation>);
 
   ngDoCheck(): void {
