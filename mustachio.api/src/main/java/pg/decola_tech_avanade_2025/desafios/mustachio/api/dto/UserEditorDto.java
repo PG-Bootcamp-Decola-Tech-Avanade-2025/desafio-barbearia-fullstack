@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-public class EditorUserDto {
+public class UserEditorDto {
     @NotBlank(message = "Username não deve ser vazio.")
     private String username;
 

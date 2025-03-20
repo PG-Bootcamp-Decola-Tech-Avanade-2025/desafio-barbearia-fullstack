@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
-public class EditorReservationDto {
+public class ReservationEditorDto {
     @NotNull(message = "UserId não deve ser vazio.")
     private UUID userId;
 
