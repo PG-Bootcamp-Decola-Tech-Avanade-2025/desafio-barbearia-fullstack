@@ -2,10 +2,11 @@ package pg.decola_tech_avanade_2025.desafios.mustachio.api.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import pg.decola_tech_avanade_2025.desafios.mustachio.api.dto.ReservationEditorDto;
 import pg.decola_tech_avanade_2025.desafios.mustachio.api.model.Reservation;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Repository
@@ -14,8 +15,22 @@ public interface ReservationRepository extends JpaRepository<Reservation, UUID> 
             SELECT (COUNT(*) = 0)
             FROM Reservation
             WHERE
-                (startsAt >= ?1 AND startsAt < ?2)
-                OR (endsAt > ?1 AND endsAt <= ?2)
+                (id != ?#{#id})
+                AND (
+                    (?#{#editorDto.startsAt} >= startsAt AND ?#{#editorDto.startsAt} < endsAt)
+                    OR (?#{#editorDto.endsAt} > startsAt AND ?#{#editorDto.endsAt} <= endsAt)
+                    OR (?#{#editorDto.startsAt} <= startsAt AND ?#{#editorDto.endsAt} >= endsAt)
+                )
             """)
-    public Boolean findIsReservationValidBetween(LocalDateTime startDateTime, LocalDateTime endDateTime);
+    public Boolean isReservationDateValid(@Param("id") UUID id, @Param("editorDto") ReservationEditorDto editorDto);
+
+    @Query("""
+            SELECT (COUNT(*) = 0)
+            FROM Reservation
+            WHERE
+                (?#{#editorDto.startsAt} >= startsAt AND ?#{#editorDto.startsAt} < endsAt)
+                OR (?#{#editorDto.endsAt} > startsAt AND ?#{#editorDto.endsAt} <= endsAt)
+                OR (?#{#editorDto.startsAt} <= startsAt AND ?#{#editorDto.endsAt} >= endsAt)
+            """)
+    public Boolean isReservationDateValid(@Param("editorDto") ReservationEditorDto editorDto);
 }
