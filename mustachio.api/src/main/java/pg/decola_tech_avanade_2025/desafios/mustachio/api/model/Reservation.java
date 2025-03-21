@@ -13,6 +13,7 @@ public class Reservation {
     public static final Duration defaultDuration = Duration.ofHours(1L);
 
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @ManyToOne

@@ -11,6 +11,7 @@ import java.util.UUID;
 @Table(name = "tb_users")
 public class User {
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @OneToMany(mappedBy = "user", orphanRemoval = true)
