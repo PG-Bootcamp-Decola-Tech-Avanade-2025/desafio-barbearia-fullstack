@@ -5,12 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import pg.decola_tech_avanade_2025.desafios.mustachio.api.dto.EditorReservationDto;
-import pg.decola_tech_avanade_2025.desafios.mustachio.api.dto.GetReservationDto;
+import pg.decola_tech_avanade_2025.desafios.mustachio.api.dto.ReservationEditorDto;
+import pg.decola_tech_avanade_2025.desafios.mustachio.api.dto.ReservationResponseDto;
+import pg.decola_tech_avanade_2025.desafios.mustachio.api.dto.UserResponseDto;
 import pg.decola_tech_avanade_2025.desafios.mustachio.api.model.Reservation;
 import pg.decola_tech_avanade_2025.desafios.mustachio.api.model.User;
-import pg.decola_tech_avanade_2025.desafios.mustachio.api.repository.ReservationRepository;
-import pg.decola_tech_avanade_2025.desafios.mustachio.api.repository.UserRepository;
+import pg.decola_tech_avanade_2025.desafios.mustachio.api.service.ReservationService;
 
 import java.net.URI;
 import java.util.List;
@@ -21,99 +21,44 @@ import java.util.UUID;
 @RequestMapping("/reservations")
 public class ReservationController {
     @Autowired
-    ReservationRepository reservationRepository;
-
-    @Autowired
-    UserRepository userRepository;
+    ReservationService reservationService;
 
     @PostMapping
-    public ResponseEntity<Void> create(@Validated @RequestBody EditorReservationDto newReservationDto) {
-        Boolean isReservationValid = reservationRepository.findIsReservationValidBetween(
-                newReservationDto.getStartsAt(), newReservationDto.getEndsAt());
-
-        if (!isReservationValid) {
-            throw new RuntimeException("Reserva inválida.");
-        }
-
-        UUID newReservationId = UUID.randomUUID();
-        Reservation newReservation = new Reservation();
-        newReservation.setId(newReservationId);
-
-        User reservationOwner = userRepository.findById(newReservationDto.getUserId()).orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
-        newReservation.setUser(reservationOwner);
-
-        BeanUtils.copyProperties(newReservationDto, newReservation);
-
-        if(newReservation.getEndsAt() == null) {
-            newReservation.setEndsAt(newReservation.getStartsAt().plus(Reservation.defaultDuration));
-        }
-
-        reservationRepository.save(newReservation);
-
-        return ResponseEntity.created(URI.create(String.format("/reservations/%s", newReservation.getId()))).build();
+    public ResponseEntity<Void> create(@Validated @RequestBody ReservationEditorDto editorDto) {
+        ReservationResponseDto responseDto = reservationService.createReservation(editorDto);
+        return ResponseEntity.created(
+                URI.create("/reservations/" + responseDto.getId())
+        ).build();
     }
 
     @GetMapping
-    public ResponseEntity<List<GetReservationDto>> findAll() {
-        List<Reservation> reservations = reservationRepository.findAll();
-        List<GetReservationDto> reservationDtos = reservations.stream().map(reservation -> {
-           GetReservationDto getReservationDto = new GetReservationDto();
-           getReservationDto.setUserId(reservation.getUser().getId());
-           BeanUtils.copyProperties(reservation, getReservationDto);
-           return getReservationDto;
-        }).toList();
-        return ResponseEntity.ok(reservationDtos);
+    public ResponseEntity<List<ReservationResponseDto>> findAll() {
+        List<ReservationResponseDto> responseDtos = reservationService.getAllReservations();
+        return ResponseEntity.ok(responseDtos);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<GetReservationDto> findById(@PathVariable UUID id) {
-        Reservation reservation = reservationRepository.findById(id).orElseThrow(() -> new RuntimeException("Reserva não encontrada."));
-        GetReservationDto getReservationDto = new GetReservationDto();
-        getReservationDto.setUserId(reservation.getUser().getId());
-        BeanUtils.copyProperties(reservation, getReservationDto);
-        return ResponseEntity.ok(getReservationDto);
+    public ResponseEntity<ReservationResponseDto> findById(@PathVariable UUID id) {
+        ReservationResponseDto responseDto = reservationService.getReservationById(id);
+        return ResponseEntity.ok(responseDto);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable UUID id, @Validated @RequestBody EditorReservationDto newReservationDto) {
-        Optional<Reservation> newReservationOptional = reservationRepository.findById(id);
-
-
-        Reservation newReservation = newReservationOptional.orElseGet(() -> {
-            Boolean isReservationValid = reservationRepository.findIsReservationValidBetween(
-                    newReservationDto.getStartsAt(), newReservationDto.getEndsAt());
-
-            if (!isReservationValid) {
-                throw new RuntimeException("Reserva inválida.");
-            }
-
-            Reservation r = new Reservation();
-            r.setId(id);
-            return r;
-        });
-
-        User reservationOwner = userRepository.findById(newReservationDto.getUserId()).orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
-        newReservation.setUser(reservationOwner);
-
-        BeanUtils.copyProperties(newReservationDto, newReservation);
-
-        if(newReservation.getEndsAt() == null) {
-            newReservation.setEndsAt(newReservation.getStartsAt().plus(Reservation.defaultDuration));
+    public ResponseEntity<Void> createOrUpdate(@PathVariable UUID id, @Validated @RequestBody ReservationEditorDto editorDto) {
+        if (reservationService.reservationExistsById(id)) {
+            reservationService.updateReservation(id, editorDto);
+            return ResponseEntity.ok().build();
+        } else {
+            ReservationResponseDto responseDto = reservationService.createReservation(editorDto);
+            return ResponseEntity.created(
+                    URI.create("/reservations/" + responseDto.getId())
+            ).build();
         }
-
-        reservationRepository.save(newReservation);
-
-        if (newReservationOptional.isEmpty()) {
-            return ResponseEntity.created(URI.create(String.format("/reservations/%s", newReservation.getId()))).build();
-        }
-
-        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
-        Reservation reservation = reservationRepository.findById(id).orElseThrow(() -> new RuntimeException("Reserva não encontrada."));
-        reservationRepository.delete(reservation);
+        reservationService.deleteReservationById(id);
         return ResponseEntity.ok().build();
     }
 }
