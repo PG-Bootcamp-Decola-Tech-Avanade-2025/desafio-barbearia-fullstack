@@ -9,8 +9,7 @@ import { ReservationService } from '../../service/reservation.service';
 @Component({
   selector: 'app-register-reservation',
   imports: [
-    ReservationEditorFormComponent,
-    ReservationsListComponent
+    ReservationEditorFormComponent
   ],
   templateUrl: './register-reservation.component.html'
 })

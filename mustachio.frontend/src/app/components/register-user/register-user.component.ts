@@ -9,8 +9,7 @@ import { UserService } from '../../service/user.service';
 @Component({
   selector: 'app-register-user',
   imports: [
-    UserEditorFormComponent,
-    UsersListComponent
+    UserEditorFormComponent
   ],
   templateUrl: './register-user.component.html'
 })

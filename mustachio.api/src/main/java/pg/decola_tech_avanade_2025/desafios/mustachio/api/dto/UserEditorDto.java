@@ -7,10 +7,10 @@ import pg.decola_tech_avanade_2025.desafios.mustachio.api.model.User;
 
 @Data
 public class UserEditorDto {
-    @NotBlank(message = "Username não deve ser vazio.")
+    @NotBlank(message = "Property must not be null or empty.")
     private String username;
 
-    @NotBlank(message = "Password não deve ser vazio.")
+    @NotBlank(message = "Property must not be null or empty.")
     private String password;
 
     public static UserEditorDto fromUser(User model) {

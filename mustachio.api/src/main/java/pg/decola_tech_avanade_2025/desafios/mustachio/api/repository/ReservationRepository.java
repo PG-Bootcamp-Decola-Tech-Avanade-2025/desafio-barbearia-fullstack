@@ -7,13 +7,14 @@ import org.springframework.stereotype.Repository;
 import pg.decola_tech_avanade_2025.desafios.mustachio.api.dto.ReservationEditorDto;
 import pg.decola_tech_avanade_2025.desafios.mustachio.api.model.Reservation;
 
+import java.util.List;
 import java.util.UUID;
 
 @Repository
 public interface ReservationRepository extends JpaRepository<Reservation, UUID> {
     @Query("""
-            SELECT (COUNT(*) = 0)
-            FROM Reservation
+            SELECT r
+            FROM Reservation r
             WHERE
                 (id != ?#{#id})
                 AND (
@@ -22,15 +23,15 @@ public interface ReservationRepository extends JpaRepository<Reservation, UUID> 
                     OR (?#{#editorDto.startsAt} <= startsAt AND ?#{#editorDto.endsAt} >= endsAt)
                 )
             """)
-    public Boolean isReservationDateValid(@Param("id") UUID id, @Param("editorDto") ReservationEditorDto editorDto);
+    public List<Reservation> findConflictingReservations(@Param("id") UUID id, @Param("editorDto") ReservationEditorDto editorDto);
 
     @Query("""
-            SELECT (COUNT(*) = 0)
-            FROM Reservation
+            SELECT r
+            FROM Reservation r
             WHERE
                 (?#{#editorDto.startsAt} >= startsAt AND ?#{#editorDto.startsAt} < endsAt)
                 OR (?#{#editorDto.endsAt} > startsAt AND ?#{#editorDto.endsAt} <= endsAt)
                 OR (?#{#editorDto.startsAt} <= startsAt AND ?#{#editorDto.endsAt} >= endsAt)
             """)
-    public Boolean isReservationDateValid(@Param("editorDto") ReservationEditorDto editorDto);
+    public List<Reservation> findConflictingReservations(@Param("editorDto") ReservationEditorDto editorDto);
 }

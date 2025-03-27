@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pg.decola_tech_avanade_2025.desafios.mustachio.api.dto.ReservationEditorDto;
 import pg.decola_tech_avanade_2025.desafios.mustachio.api.dto.ReservationResponseDto;
+import pg.decola_tech_avanade_2025.desafios.mustachio.api.exception_handler.ReservationConflictException;
+import pg.decola_tech_avanade_2025.desafios.mustachio.api.exception_handler.ResourceNotFoundException;
 import pg.decola_tech_avanade_2025.desafios.mustachio.api.model.Reservation;
 import pg.decola_tech_avanade_2025.desafios.mustachio.api.model.User;
 import pg.decola_tech_avanade_2025.desafios.mustachio.api.repository.ReservationRepository;
@@ -27,13 +29,13 @@ public class ReservationService {
         return reservationRepository.existsById(id);
     }
 
-    public ReservationResponseDto createReservation(ReservationEditorDto editorDto) {
-         User owner = userRepository.findById(editorDto.getUserId()).orElseThrow(RuntimeException::new);
+    public ReservationResponseDto createReservation(ReservationEditorDto editorDto) throws ResourceNotFoundException, ReservationConflictException {
+         User owner = userRepository.findById(editorDto.getUserId()).orElseThrow(() -> new ResourceNotFoundException("users", editorDto.getUserId()));
 
         if (editorDto.getEndsAt() == null) editorDto.setEndsAt(editorDto.getStartsAt().plus(Reservation.defaultDuration));
 
-        boolean isReservationDateValid = reservationRepository.isReservationDateValid(editorDto);
-        if (!isReservationDateValid) throw new RuntimeException();
+        List<Reservation> conflictingReservations = reservationRepository.findConflictingReservations(editorDto);
+        if (!conflictingReservations.isEmpty()) throw new ReservationConflictException(editorDto, conflictingReservations);
 
         Reservation newReservation = new Reservation();
         BeanUtils.copyProperties(editorDto, newReservation);
@@ -49,23 +51,23 @@ public class ReservationService {
         return reservations.stream().map(ReservationResponseDto::fromReservation).toList();
     }
 
-    public ReservationResponseDto getReservationById(UUID id) {
-        Reservation reservation = reservationRepository.findById(id).orElseThrow(RuntimeException::new);
+    public ReservationResponseDto getReservationById(UUID id) throws ResourceNotFoundException {
+        Reservation reservation = reservationRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("reservations", id));
         return ReservationResponseDto.fromReservation(reservation);
     }
 
-    public ReservationResponseDto updateReservation(UUID id, ReservationEditorDto editorDto) {
-        Reservation reservation = reservationRepository.findById(id).orElseThrow(RuntimeException::new);
+    public ReservationResponseDto updateReservation(UUID id, ReservationEditorDto editorDto) throws ResourceNotFoundException, ReservationConflictException {
+        Reservation reservation = reservationRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("reservations", id));
 
         if (editorDto.getEndsAt() == null) editorDto.setEndsAt(editorDto.getStartsAt().plus(Reservation.defaultDuration));
 
-        boolean isReservationDateValid = reservationRepository.isReservationDateValid(id, editorDto);
-        if (!isReservationDateValid) throw new RuntimeException();
+        List<Reservation> conflictingReservations = reservationRepository.findConflictingReservations(editorDto);
+        if (!conflictingReservations.isEmpty()) throw new ReservationConflictException(editorDto, conflictingReservations);
 
         BeanUtils.copyProperties(editorDto, reservation);
 
         if (editorDto.getUserId() != reservation.getUser().getId()) {
-            User owner = userRepository.findById(editorDto.getUserId()).orElseThrow(RuntimeException::new);
+            User owner = userRepository.findById(editorDto.getUserId()).orElseThrow(() -> new ResourceNotFoundException("users", editorDto.getUserId()));
             reservation.setUser(owner);
         }
 

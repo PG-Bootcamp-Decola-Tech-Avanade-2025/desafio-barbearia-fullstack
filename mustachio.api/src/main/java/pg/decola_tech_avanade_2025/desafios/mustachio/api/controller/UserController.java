@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pg.decola_tech_avanade_2025.desafios.mustachio.api.dto.UserEditorDto;
 import pg.decola_tech_avanade_2025.desafios.mustachio.api.dto.UserResponseDto;
+import pg.decola_tech_avanade_2025.desafios.mustachio.api.exception_handler.ResourceNotFoundException;
 import pg.decola_tech_avanade_2025.desafios.mustachio.api.service.UserService;
 
 import java.net.URI;
@@ -33,13 +34,13 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponseDto> findById(@PathVariable UUID id) {
+    public ResponseEntity<UserResponseDto> findById(@PathVariable UUID id) throws ResourceNotFoundException {
         UserResponseDto responseDto = userService.getUserById(id);
         return ResponseEntity.ok(responseDto);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> createOrUpdate(@PathVariable UUID id, @Valid @RequestBody UserEditorDto editorDto) {
+    public ResponseEntity<Void> createOrUpdate(@PathVariable UUID id, @Valid @RequestBody UserEditorDto editorDto) throws ResourceNotFoundException {
         if (userService.userExistsById(id)) {
             userService.updateUser(id, editorDto);
             return ResponseEntity.ok().build();

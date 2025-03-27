@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pg.decola_tech_avanade_2025.desafios.mustachio.api.dto.UserEditorDto;
 import pg.decola_tech_avanade_2025.desafios.mustachio.api.dto.UserResponseDto;
+import pg.decola_tech_avanade_2025.desafios.mustachio.api.exception_handler.ResourceNotFoundException;
 import pg.decola_tech_avanade_2025.desafios.mustachio.api.model.User;
 import pg.decola_tech_avanade_2025.desafios.mustachio.api.repository.UserRepository;
 
@@ -34,13 +35,13 @@ public class UserService {
         return users.stream().map(UserResponseDto::fromUser).toList();
     }
 
-    public UserResponseDto getUserById(UUID id) {
-        User user = userRepository.findById(id).orElseThrow(RuntimeException::new);
+    public UserResponseDto getUserById(UUID id) throws ResourceNotFoundException {
+        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("users", id));
         return UserResponseDto.fromUser(user);
     }
 
-    public UserResponseDto updateUser(UUID id, UserEditorDto editorDto) {
-        User user = userRepository.findById(id).orElseThrow(RuntimeException::new);
+    public UserResponseDto updateUser(UUID id, UserEditorDto editorDto) throws ResourceNotFoundException {
+        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("users", id));
 
         BeanUtils.copyProperties(editorDto, user);
         userRepository.save(user);

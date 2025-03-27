@@ -10,10 +10,10 @@ import java.util.UUID;
 
 @Data
 public class ReservationEditorDto {
-    @NotNull(message = "UserId não deve ser vazio.")
+    @NotNull(message = "Property must not be null or empty.")
     private UUID userId;
 
-    @NotNull(message = "StartsAt não deve ser vazio.")
+    @NotNull(message = "Property must not be null or empty.")
     private LocalDateTime startsAt;
 
     private LocalDateTime endsAt;
