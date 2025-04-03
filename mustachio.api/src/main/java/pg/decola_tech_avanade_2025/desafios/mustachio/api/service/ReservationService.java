@@ -61,7 +61,7 @@ public class ReservationService {
 
         if (editorDto.getEndsAt() == null) editorDto.setEndsAt(editorDto.getStartsAt().plus(Reservation.defaultDuration));
 
-        List<Reservation> conflictingReservations = reservationRepository.findConflictingReservations(editorDto);
+        List<Reservation> conflictingReservations = reservationRepository.findConflictingReservations(id, editorDto);
         if (!conflictingReservations.isEmpty()) throw new ReservationConflictException(editorDto, conflictingReservations);
 
         BeanUtils.copyProperties(editorDto, reservation);
