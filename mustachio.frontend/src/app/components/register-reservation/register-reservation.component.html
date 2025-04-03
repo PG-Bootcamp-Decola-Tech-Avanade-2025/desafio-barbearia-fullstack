@@ -2,6 +2,6 @@
   class="flex gap-10"
 >
   @if(dataLoaded) {
-    <app-reservation-editor-form [baseReservationData]="baseReservation" (submitValid)="registerReservation($event)"></app-reservation-editor-form>
+    <app-reservation-editor-form [userOptions]="userOptions" [baseReservationData]="baseReservation" (submitValid)="registerReservation($event)"></app-reservation-editor-form>
   }
 </div>

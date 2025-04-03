@@ -13,11 +13,16 @@
   style="*{border: 1px solid black}"
 >
   <mat-form-field appearance="outline">
-    <mat-label>User ID</mat-label>
-    <input matInput type="text" [formControlName]="'userId'" [id]="'userId'">
+    <mat-label>User</mat-label>
+    <mat-select [formControlName]="'userId'" [id]="'userId'">
+      <mat-option>Clear</mat-option>
+      @for (user of userOptions(); track $index) {
+        <mat-option value="{{ user.id }}">{{ user.username }}</mat-option>
+      }
+    </mat-select>
     <mat-error>
       @if (reservationEditorForm.get("userId")?.hasError('required')) {
-        Informe um ID de usuário.
+        Informe um usuário.
       }
     </mat-error>
   </mat-form-field>
@@ -36,7 +41,6 @@
       }
     </mat-error>
   </mat-form-field>
-
 
   <mat-form-field appearance="outline">
     <mat-label>Time</mat-label>

@@ -8,6 +8,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatTimepickerModule } from '@angular/material/timepicker';
 import { FormsModule } from '@angular/forms'
 import { Reservation } from '../../model/reservation';
+import { MatSelectModule } from '@angular/material/select';
+import { User } from '../../model/user';
 
 @Component({
   selector: 'app-reservation-editor-form',
@@ -18,7 +20,8 @@ import { Reservation } from '../../model/reservation';
     MatCardModule,
     MatDatepickerModule,
     MatTimepickerModule,
-    FormsModule
+    FormsModule,
+    MatSelectModule
   ],
   templateUrl: './reservation-editor-form.component.html',
 })
@@ -26,6 +29,8 @@ export class ReservationEditorFormComponent implements OnInit {
   formBuilder: FormBuilder = inject(FormBuilder);
 
   baseReservationData: InputSignal<ReservationEditorDto> = input<ReservationEditorDto>(Reservation.getEmptyReservation())
+
+  userOptions: InputSignal<User[]> = input<User[]>([]);
 
   submitValid: OutputEmitterRef<ReservationEditorDto> = output<ReservationEditorDto>();
 
@@ -41,7 +46,7 @@ export class ReservationEditorFormComponent implements OnInit {
 
     this.reservationEditorForm = this.formBuilder.group({
       userId: [this.baseReservationData().userId, Validators.required],
-      startsAt: [baseStartsAt, Validators.required]
+      startsAt: [baseStartsAt, Validators.required],
     });
 
     this.dataLoaded = true;
