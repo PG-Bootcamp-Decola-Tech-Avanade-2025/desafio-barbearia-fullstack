@@ -1,4 +1,4 @@
-<table mat-table [dataSource]="userService.findAll()" class="w-xl">
+<table mat-table [dataSource]="userData" class="w-xl">
   <ng-container matColumnDef="id">
     <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
     <mat-cell *matCellDef="let user"> {{user.id}} </mat-cell>
@@ -9,6 +9,16 @@
     <mat-cell *matCellDef="let user"> {{user.username}} </mat-cell>
   </ng-container>
 
-  <mat-header-row *matHeaderRowDef="['id', 'username']"></mat-header-row>
-  <mat-row *matRowDef="let row; columns: ['id', 'username'];"></mat-row>
+  <ng-container matColumnDef="actions">
+    <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+    <mat-cell *matCellDef="let user">
+      <ul class="flex flex-row gap-5">
+        <li><a [routerLink]="['users/edit/', user.id]">Edit</a></li>
+        <li><a class="cursor-pointer" (click)="deleteUser(user.id)">Delete</a></li>
+      </ul>
+    </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="['id', 'username', 'actions']"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: ['id', 'username', 'actions'];"></mat-row>
 </table>

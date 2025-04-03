@@ -1,4 +1,5 @@
 <div class="flex gap-10">
-  <app-user-editor-form (submitValid)="registerUser($event)"></app-user-editor-form>
-  <!-- <app-users-list></app-users-list> -->
+  @if(dataLoaded) {
+    <app-user-editor-form [baseUserData]="baseUser" (submitValid)="registerUser($event)"></app-user-editor-form>
+  }
 </div>

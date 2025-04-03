@@ -1,4 +1,4 @@
-import { Component, inject, output, OutputEmitterRef } from '@angular/core';
+import { Component, inject, input, InputSignal, OnInit, output, OutputEmitterRef } from '@angular/core';
 import { ReservationEditorDto } from '../../dto/reservation-editor-dto';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatTimepickerModule } from '@angular/material/timepicker';
 import { FormsModule } from '@angular/forms'
+import { Reservation } from '../../model/reservation';
 
 @Component({
   selector: 'app-reservation-editor-form',
@@ -21,29 +22,43 @@ import { FormsModule } from '@angular/forms'
   ],
   templateUrl: './reservation-editor-form.component.html',
 })
-export class ReservationEditorFormComponent {
-  submitValid: OutputEmitterRef<ReservationEditorDto> = output<ReservationEditorDto>();
-
-  endsAt: Date = new Date();
-
+export class ReservationEditorFormComponent implements OnInit {
   formBuilder: FormBuilder = inject(FormBuilder);
 
-  reservationEditorForm: FormGroup = this.formBuilder.group({
-    userId: ['', Validators.required],
-    startsAt: [null, Validators.required]
-  });
+  baseReservationData: InputSignal<ReservationEditorDto> = input<ReservationEditorDto>(Reservation.getEmptyReservation())
 
-  alert(s: string) {
-    alert(s);
+  submitValid: OutputEmitterRef<ReservationEditorDto> = output<ReservationEditorDto>();
+
+  reservationEditorForm: FormGroup = this.formBuilder.group({});
+
+  dataLoaded: boolean = false;
+
+  ngOnInit(): void {
+    let baseStartsAt =
+      new Date(this.baseReservationData().startsAt).getTime() == new Date(0).getTime()
+        ? null
+        : new Date(this.baseReservationData().startsAt);
+
+    this.reservationEditorForm = this.formBuilder.group({
+      userId: [this.baseReservationData().userId, Validators.required],
+      startsAt: [baseStartsAt, Validators.required]
+    });
+
+    this.dataLoaded = true;
   }
 
   onSubmit() {
     if (!this.reservationEditorForm.valid) {
       return;
     }
+
+    let startsAt: Date = new Date(this.reservationEditorForm.getRawValue()['startsAt']);
+    let utcOffsetHours = startsAt.getTimezoneOffset() / 60;
+    startsAt.setHours(startsAt.getHours() - utcOffsetHours);
+
     let reservationEditorDto: ReservationEditorDto = new ReservationEditorDto(
       this.reservationEditorForm.getRawValue()['userId'],
-      this.reservationEditorForm.getRawValue()['startsAt'],
+      startsAt,
       null
     );
 

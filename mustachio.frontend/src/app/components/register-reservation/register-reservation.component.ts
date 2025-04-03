@@ -1,10 +1,11 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { IReservationService } from '../../service/IReservationService';
-import { FakeReservationService } from '../../service/fake-reservation.service';
 import { ReservationEditorDto } from '../../dto/reservation-editor-dto';
 import { ReservationEditorFormComponent } from '../reservation-editor-form/reservation-editor-form.component';
-import { ReservationsListComponent } from "../reservations-list/reservations-list.component";
 import { ReservationService } from '../../service/reservation.service';
+import { Router } from '@angular/router';
+import { Reservation } from '../../model/reservation';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-register-reservation',
@@ -13,10 +14,30 @@ import { ReservationService } from '../../service/reservation.service';
   ],
   templateUrl: './register-reservation.component.html'
 })
-export class RegisterReservationComponent {
+export class RegisterReservationComponent implements OnInit {
   private reservationService:IReservationService = inject(ReservationService);
+  private router: Router = inject(Router);
+
+  baseReservation: Reservation = Reservation.getEmptyReservation();
+
+  @Input("id") baseReservationId = "";
+
+  dataLoaded: boolean = false;
+
+  async ngOnInit(): Promise<void> {
+    if(!!this.baseReservationId) {
+      this.baseReservation = await firstValueFrom(this.reservationService.findById(this.baseReservationId));
+    }
+    this.dataLoaded = true;
+  }
 
   registerReservation(reservationEditorDto: ReservationEditorDto) {
-    this.reservationService.create(reservationEditorDto).subscribe();
+    if(!!this.baseReservationId) {
+      this.reservationService.updateById(this.baseReservationId, reservationEditorDto)
+      .subscribe(() => this.router.navigateByUrl(""));
+    } else {
+      this.reservationService.create(reservationEditorDto)
+      .subscribe(() => this.router.navigateByUrl(""));
+    }
   }
 }
